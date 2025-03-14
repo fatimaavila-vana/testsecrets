@@ -10,19 +10,23 @@ on:
 jobs:
   test-secrets:
     runs-on: ubuntu-latest
-    environment:
-      # The environment name depends on the branch that is pushed
-      # dev -> dev environment
-      # qa -> qa environment
-      # main -> prod environment
-      name: ${{ github.ref == 'refs/heads/dev' && 'dev' || github.ref == 'refs/heads/qa' && 'qa' || 'prod' }}
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Set environment variables based on branch
+        id: set_env
+        run: |
+          if [[ "${GITHUB_REF}" == "refs/heads/dev" ]]; then
+            echo "ENV_NAME=dev" >> $GITHUB_ENV
+          elif [[ "${GITHUB_REF}" == "refs/heads/qa" ]]; then
+            echo "ENV_NAME=qa" >> $GITHUB_ENV
+          else
+            echo "ENV_NAME=prod" >> $GITHUB_ENV
+          fi
+
       - name: Print secrets based on environment
         run: |
-          echo "Running in the ${{ environment.name }} environment"
-          echo "SECRET_KEY: ${{ secrets["SECRET_KEY_${{ environment.name | upper }}"] }}"
-          echo "API_KEY: ${{ secrets["API_KEY_${{ environment.name | upper }}"] }}"
+          echo "Running in the ${{ env.ENV_NAME }} environment"
+          echo "SECRET_KEY: ${{ secrets["SECRET_KEY_${{ env.ENV_NAME | upper }}"] }}"
+          echo "API_KEY: ${{ secrets["API_KEY_${{ env.ENV_NAME | upper }}"] }}"
