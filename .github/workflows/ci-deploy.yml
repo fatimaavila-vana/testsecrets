@@ -34,5 +34,5 @@ jobs:
       - name: Print secrets based on environment
         run: |
           echo "Running in the ${{ env.ENV_NAME }} environment"
-          echo "SECRET_KEY: ${{ secrets[env.SECRET_KEY] }}"
-          echo "API_KEY: ${{ secrets[env.API_KEY] }}"
+          echo "SECRET_KEY: ${{ secrets[env.SECRET_KEY_PROD] }}"
+          echo "API_KEY: ${{ secrets[env.API_KEY_PROD] }}"
