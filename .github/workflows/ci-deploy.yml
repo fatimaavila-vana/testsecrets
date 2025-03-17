@@ -1,0 +1,25 @@
+name: Test Secrets in Environments
+
+on:
+  push:
+    branches:
+      - dev
+      - qa
+      - main
+
+jobs:
+  test-secrets:
+    runs-on: ubuntu-latest
+
+    # Define environment explicitly based on branch
+    environment: ${{ github.ref == 'refs/heads/dev' && 'dev' || github.ref == 'refs/heads/qa' && 'qa' || 'production' }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print secrets based on environment
+        run: |
+          echo "Running in the ${{ vars.ENV_NAME }} environment"
+          echo "SECRET_KEY: ${{ secrets.SECRET_KEY }}"
+          echo "API_KEY: ${{ secrets.API_KEY }}"
