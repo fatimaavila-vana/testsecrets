@@ -7,15 +7,15 @@ on:
       - qa
       - main
 
-jobs: # hola
+jobs:
   test-secrets:
     runs-on: ubuntu-latest
-    environment:
-      # The environment name depends on the branch that is pushed
-      # dev -> dev environment
-      # qa -> qa environment
-      # main -> prod environment
-      name: ${{ github.ref == 'refs/heads/dev' && 'dev' || github.ref == 'refs/heads/qa' && 'qa' || 'prod' }}
+
+    environment: 
+      # Manually map branches to environments
+      dev: development
+      qa: qa
+      main: production
 
     steps:
       - name: Checkout code
@@ -23,6 +23,6 @@ jobs: # hola
 
       - name: Print secrets based on environment
         run: |
-          echo "Running in the ${{ environment.name }} environment"
-          echo "SECRET_KEY: ${{ secrets["SECRET_KEY_${{ environment.name | upper }}"] }}"
-          echo "API_KEY: ${{ secrets["API_KEY_${{ environment.name | upper }}"] }}"
+          echo "Running in the ${{ vars.ENV_NAME }} environment"
+          echo "SECRET_KEY: ${{ secrets.SECRET_KEY }}"
+          echo "API_KEY: ${{ secrets.API_KEY }}"
