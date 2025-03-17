@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Define environment explicitly based on branch
-    environment: ${{ github.ref == 'refs/heads/dev' && 'dev' || github.ref == 'refs/heads/qa' && 'qa' || 'production' }}
+    environment: ${{ github.ref == 'refs/heads/dev' && 'dev' || github.ref == 'refs/heads/qa' && 'qa' || 'prod' }}
 
     steps:
       - name: Checkout code
